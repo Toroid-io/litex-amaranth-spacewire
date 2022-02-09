@@ -151,7 +151,7 @@ class SpWNode(Module, AutoCSR):
         cli_params.append("--link-freq={}".format(link_freq))
         cli_params.append("generate")
         cli_params.append("--type=v")
-        sdir = get_data_mod("amaranth", "spacewire").data_location
+        sdir = os.path.join(os.path.dirname(__file__), 'amaranth-spacewire')
         if subprocess.call(["python3", os.path.join(sdir, "cli.py"), *cli_params],
             stdout=open(verilog_filename, "w")):
             raise OSError("Unable to elaborate amaranth-spacewire core, please check your Amaranth/Yosys install")
