@@ -1,0 +1,12 @@
+*.vcd
+__pycache__
+vcd/*
+*.gtkw
+gtkw/*
+gtkw_viewers/*
+build/
+*.il
+*_bmc
+*_cover
+dist/
+*egg-info
