@@ -7,8 +7,6 @@ from litex import get_data_mod
 from litex.soc.interconnect.csr import *
 from litescope import LiteScopeAnalyzer
 
-from amaranth_spacewire import SpWNode
-
 # AMARANTH SPACEWIRE --------------------------------------------------------------------------------
 
 class SpWNode(Module, AutoCSR):
