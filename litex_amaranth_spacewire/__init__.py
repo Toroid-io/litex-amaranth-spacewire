@@ -10,8 +10,10 @@ from litescope import LiteScopeAnalyzer
 # AMARANTH SPACEWIRE --------------------------------------------------------------------------------
 
 class SpWNode(Module, AutoCSR):
-    def __init__(self, platform, pads, time_master=True):
+    def __init__(self, platform, pads, rx_tokens=7, tx_tokens=7, time_master=True):
         self.platform     = platform
+        self._rx_tokens = rx_tokens
+        self._tx_tokens = tx_tokens
 
         # Data/Strobe
         self.d_input = Signal()
@@ -141,11 +143,13 @@ class SpWNode(Module, AutoCSR):
         ]
 
     @staticmethod
-    def elaborate(time_master, src_freq, link_freq, verilog_filename):
+    def elaborate(time_master, src_freq, link_freq, rx_tokens, tx_tokens, verilog_filename):
         cli_params = []
         if time_master:
             cli_params.append("--time-master")
         cli_params.append("--src-freq={}".format(src_freq))
+        cli_params.append("--rx-tokens={}".format(rx_tokens))
+        cli_params.append("--tx-tokens={}".format(tx_tokens))
         cli_params.append("--link-freq={}".format(link_freq))
         cli_params.append("generate")
         cli_params.append("--type=v")
@@ -160,6 +164,8 @@ class SpWNode(Module, AutoCSR):
             time_master      = self._time_master,
             src_freq         = int(1e3/self.platform.default_clk_period),
             link_freq        = 10,
+            rx_tokens        = self._rx_tokens,
+            tx_tokens        = self._tx_tokens,
             verilog_filename = verilog_filename)
         self.platform.add_source(verilog_filename)
         self.specials += Instance("amaranth_spacewire_node", **self.node_params)
